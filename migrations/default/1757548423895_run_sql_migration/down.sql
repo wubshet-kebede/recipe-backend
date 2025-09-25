@@ -1,0 +1,41 @@
+-- Could not auto-generate a down migration.
+-- Please write an appropriate down migration for the SQL below:
+-- CREATE TABLE IF NOT EXISTS public.orders (
+--     id uuid NOT NULL DEFAULT gen_random_uuid(),
+--     user_id uuid NOT NULL,
+--     total_amount numeric NOT NULL,
+--     currency text NOT NULL,
+--     return_url text NOT NULL,
+--     status text NOT NULL,
+--     chapa_tx_ref text NOT NULL,
+--     chapa_transaction_id text,
+--     created_at timestamptz NOT NULL DEFAULT now(),
+--     updated_at timestamptz NOT NULL DEFAULT now(),
+--
+--
+--     CONSTRAINT orders_pkey PRIMARY KEY (id),
+--
+--
+--     CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES public.users(id) ON DELETE CASCADE,
+--
+--
+--     CONSTRAINT orders_chapa_tx_ref_key UNIQUE (chapa_tx_ref)
+-- );
+--
+--
+-- CREATE INDEX IF NOT EXISTS idx_orders_user_id ON public.orders USING btree (user_id);
+--
+--
+-- CREATE INDEX IF NOT EXISTS idx_orders_chapa_tx_ref ON public.orders USING btree (chapa_tx_ref);
+--
+--
+-- CREATE OR REPLACE FUNCTION update_updated_at_column()
+-- RETURNS TRIGGER AS $$
+-- BEGIN
+--     NEW.updated_at = now();
+--     RETURN NEW;
+-- END;
+-- $$ language 'plpgsql';
+--
+-- CREATE TRIGGER update_orders_updated_at BEFORE UPDATE
+--     ON public.orders FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();

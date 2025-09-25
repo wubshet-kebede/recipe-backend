@@ -1,0 +1,11 @@
+-- Could not auto-generate a down migration.
+-- Please write an appropriate down migration for the SQL below:
+-- CREATE TABLE public.contact_messages (
+--     id UUID PRIMARY KEY,
+--     name TEXT NOT NULL,
+--     email TEXT NOT NULL,
+--     subject TEXT NOT NULL,
+--     message TEXT NOT NULL,
+--     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+--     is_read BOOLEAN NOT NULL DEFAULT FALSE
+-- );

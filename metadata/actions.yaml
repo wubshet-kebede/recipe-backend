@@ -1,0 +1,68 @@
+actions:
+  - name: initiate_chapa_payment
+    definition:
+      kind: synchronous
+      handler: http://go-app:8082/initiate_chapa_payment
+      forward_client_headers: true
+    permissions:
+      - role: user
+  - name: login
+    definition:
+      kind: synchronous
+      handler: http://go-app:8082/login
+      forward_client_headers: true
+    permissions:
+      - role: public
+      - role: user
+  - name: signUp
+    definition:
+      kind: synchronous
+      handler: http://go-app:8082/signUp
+      forward_client_headers: true
+    permissions:
+      - role: public
+      - role: user
+  - name: submitContactForm
+    definition:
+      kind: synchronous
+      handler: http://go-app:8082/submitContactForm
+      forward_client_headers: true
+    permissions:
+      - role: public
+      - role: user
+  - name: uploadFiles
+    definition:
+      kind: synchronous
+      handler: http://go-app:8082/uploadFiles
+      forward_client_headers: true
+    permissions:
+      - role: user
+  - name: uploadProfilePicture
+    definition:
+      kind: synchronous
+      handler: http://go-app:8082/uploadProfilePicture
+      forward_client_headers: true
+    permissions:
+      - role: user
+custom_types:
+  enums: []
+  input_objects:
+    - name: LoginInput
+    - name: LoginRequest
+    - name: SignUpInput
+    - name: FileInput
+    - name: UploadFilesRequestInput
+    - name: OuterInput
+    - name: ImageInput
+    - name: UploadProfilePictureInput
+    - name: RecipeItemInput
+    - name: InitiateChapaPaymentInput
+    - name: SubmitContactFormInput
+  objects:
+    - name: LoginResponse
+    - name: SignUpResponse
+    - name: UploadFilesResponse
+    - name: UploadProfilePictureOutput
+    - name: InitiateChapaPaymentOutput
+    - name: ContactActionResponse
+  scalars: []

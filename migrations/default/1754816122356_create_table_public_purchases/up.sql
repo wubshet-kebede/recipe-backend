@@ -1,0 +1,2 @@
+CREATE TABLE "public"."purchases" ("id" uuid NOT NULL DEFAULT gen_random_uuid(), "recipe_id" uuid NOT NULL, "buyer_id" uuid NOT NULL, "purchase_date" timestamptz NOT NULL DEFAULT now(), "amount_paid" numeric NOT NULL, PRIMARY KEY ("id") , FOREIGN KEY ("recipe_id") REFERENCES "public"."recipes"("id") ON UPDATE restrict ON DELETE restrict, FOREIGN KEY ("buyer_id") REFERENCES "public"."users"("id") ON UPDATE restrict ON DELETE restrict, UNIQUE ("id"));
+CREATE EXTENSION IF NOT EXISTS pgcrypto;

@@ -1,0 +1,68 @@
+services:
+  postgres:
+    image: postgres:15
+    restart: always
+    volumes:
+      - recipe-backend_db_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+  graphql-engine:
+    image: hasura/graphql-engine:v2.46.0
+    ports:
+      - "8081:8080"
+    restart: always
+    environment:
+      ## postgres database to store Hasura metadata
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: ${HASURA_GRAPHQL_METADATA_DATABASE_URL}
+      ## this env var can be used to add the above postgres database to Hasura as a data source. this can be removed/updated based on your needs
+      PG_DATABASE_URL: ${PG_DATABASE_URL}
+      ## enable the console served by server
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true" # set to "false" to disable console
+      ## enable debugging mode. It is recommended to disable this in production
+      HASURA_GRAPHQL_DEV_MODE: "true"
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      ## uncomment next line to run console offline (i.e load console assets from server instead of CDN)
+      # HASURA_GRAPHQL_CONSOLE_ASSETS_DIR: /srv/console-assets
+      ## uncomment next line to set an admin secret
+      HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_GRAPHQL_ADMIN_SECRET}
+      HASURA_GRAPHQL_JWT_SECRET: ${HASURA_GRAPHQL_JWT_SECRET}
+      HASURA_GRAPHQL_UNAUTHORIZED_ROLE: ${HASURA_GRAPHQL_UNAUTHORIZED_ROLE}
+      HASURA_GRAPHQL_METADATA_DEFAULTS: '{"backend_configs":{"dataconnector":{"athena":{"uri":"http://data-connector-agent:8081/api/v1/athena"},"mariadb":{"uri":"http://data-connector-agent:8081/api/v1/mariadb"},"mysql8":{"uri":"http://data-connector-agent:8081/api/v1/mysql"},"oracle":{"uri":"http://data-connector-agent:8081/api/v1/oracle"},"snowflake":{"uri":"http://data-connector-agent:8081/api/v1/snowflake"}}}}'
+    depends_on:
+      data-connector-agent:
+        condition: service_healthy
+    env_file:
+      - .env
+  data-connector-agent:
+    image: hasura/graphql-data-connector:v2.46.0
+    restart: always
+    ports:
+      - 8083:8081
+    environment:
+      QUARKUS_LOG_LEVEL: ${QUARKUS_LOG_LEVEL}
+      QUARKUS_OPENTELEMETRY_ENABLED: ${QUARKUS_OPENTELEMETRY_ENABLED}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/api/v1/athena/health"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+      start_period: 5s
+  go-app:
+    build: .
+    environment:
+      PORT: 8082
+      HASURA_GRAPHQL_URL: http://graphql-engine:8080/v1/graphql
+      HASURA_ADMIN_SECRET: I_LOVE_SUPER_SECRET_HERO_PASSWORD
+    ports:
+      - "8082:8082"
+    depends_on:
+      - graphql-engine
+    volumes:
+      - ./uploads:/app/uploads
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+volumes:
+  recipe-backend_db_data:

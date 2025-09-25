@@ -1,0 +1,114 @@
+table:
+  name: users
+  schema: public
+array_relationships:
+  - name: bookmarks
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          name: bookmarks
+          schema: public
+  - name: comments
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          name: comments
+          schema: public
+  - name: likes
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          name: likes
+          schema: public
+  - name: orders
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          name: orders
+          schema: public
+  - name: profile_images
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          name: profile_images
+          schema: public
+  - name: purchases
+    using:
+      foreign_key_constraint_on:
+        column: buyer_id
+        table:
+          name: purchases
+          schema: public
+  - name: ratings
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          name: ratings
+          schema: public
+  - name: recipes
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          name: recipes
+          schema: public
+insert_permissions:
+  - role: public
+    permission:
+      check: {}
+      columns:
+        - email
+        - first_name
+        - last_name
+        - middle_name
+        - password_hash
+        - phone_number
+        - username
+    comment: ""
+select_permissions:
+  - role: public
+    permission:
+      columns:
+        - email
+        - first_name
+        - id
+        - last_name
+        - middle_name
+        - phone_number
+        - username
+      filter: {}
+    comment: ""
+  - role: user
+    permission:
+      columns:
+        - email
+        - first_name
+        - id
+        - last_name
+        - middle_name
+        - phone_number
+        - username
+      filter: {}
+    comment: ""
+update_permissions:
+  - role: user
+    permission:
+      columns:
+        - email
+        - first_name
+        - last_name
+        - middle_name
+        - password_hash
+        - phone_number
+        - username
+      filter:
+        id:
+          _eq: X-Hasura-User-Id
+      check: null
+    comment: ""

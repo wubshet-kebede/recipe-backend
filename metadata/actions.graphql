@@ -1,0 +1,137 @@
+type Mutation {
+  initiate_chapa_payment(
+    input: InitiateChapaPaymentInput!
+  ): InitiateChapaPaymentOutput
+}
+
+type Mutation {
+  login(
+    input: LoginRequest!
+  ): LoginResponse
+}
+
+type Mutation {
+  signUp(
+    input: SignUpInput!
+  ): SignUpResponse
+}
+
+type Mutation {
+  submitContactForm(
+    input: SubmitContactFormInput!
+  ): ContactActionResponse
+}
+
+type Mutation {
+  uploadFiles(
+    input: UploadFilesRequestInput!
+  ): UploadFilesResponse
+}
+
+type Mutation {
+  uploadProfilePicture(
+    input: UploadProfilePictureInput!
+  ): UploadProfilePictureOutput
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+input LoginRequest {
+  email: String!
+  password: String!
+}
+
+input SignUpInput {
+  username: String!
+  first_name: String!
+  middle_name: String!
+  last_name: String!
+  phone_number: String!
+  email: String!
+  password_hash: String!
+}
+
+input FileInput {
+  base64: String!
+}
+
+input UploadFilesRequestInput {
+  files: [FileInput!]!
+  folder: String!
+}
+
+input OuterInput {
+  input: UploadFilesRequestInput!
+}
+
+input ImageInput {
+  base64: String!
+}
+
+input UploadProfilePictureInput {
+  file: ImageInput!
+  folder: String
+}
+
+input RecipeItemInput {
+  recipeId: uuid!
+  quantity: Int!
+}
+
+input InitiateChapaPaymentInput {
+  recipeItems: [RecipeItemInput!]!
+  amount: Float!
+  currency: String!
+  returnUrl: String!
+}
+
+input SubmitContactFormInput {
+  name: String!
+  email: String!
+  subject: String!
+  message: String!
+}
+
+type LoginResponse {
+  id: uuid!
+  username: String!
+  token: String!
+  email: String!
+  first_name: String!
+  last_name: String!
+  message: String!
+}
+
+type SignUpResponse {
+  id: uuid!
+  username: String!
+  email: String!
+  message: String!
+}
+
+type UploadFilesResponse {
+  success: Boolean!
+  message: String
+  urls: [String!]
+}
+
+type UploadProfilePictureOutput {
+  success: Boolean!
+  profilePictureUrl: String!
+}
+
+type InitiateChapaPaymentOutput {
+  checkoutUrl: String!
+  message: String!
+  orderId: uuid!
+  txRef: String!
+}
+
+type ContactActionResponse {
+  success: Boolean!
+  message: String!
+}
+
