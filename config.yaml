@@ -1,7 +1,0 @@
-version: 3
-endpoint: http://localhost:8081
-admin_secret: I_LOVE_SUPER_SECRET_HERO_PASSWORD
-metadata_directory: metadata
-actions:
-  kind: synchronous
-  handler_webhook_baseurl: http://localhost:3000
